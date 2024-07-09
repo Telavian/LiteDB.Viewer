@@ -1,2 +1,2 @@
 # LiteDB.Viewer
-A browser based LiteDB file viewer and query tool
+A browser based LiteDB online file viewer and query tool
