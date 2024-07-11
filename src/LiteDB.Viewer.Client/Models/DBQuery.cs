@@ -1,12 +1,14 @@
-﻿namespace LiteDB.Viewer.Client.Models
+﻿namespace LiteDB.Viewer.Client.Models;
+
+public class DBQuery
 {
-    public class DBQuery
-    {
-        public Guid QueryId { get; } = Guid.NewGuid();
-        public required string Header { get; init; }
+    public static DBQuery Null { get; } = new DBQuery { Header = "" };
 
-        public string Query { get; set; } = "";
+    public Guid QueryId { get; } = Guid.NewGuid();
+    public required string Header { get; init; }
 
-        public string JsonResult { get; set; } = "";
-    }
+    public string Query { get; set; } = "";
+
+    public string JsonResult { get; set; } = "";
+    public DBQueryGridRecords GridRecords { get; set; } = new DBQueryGridRecords();
 }

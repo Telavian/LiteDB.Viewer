@@ -6,7 +6,7 @@
     <DialogContent>
         <MudStack Style="margin: 5px; min-width: 450px;">            
             <MudStack Style="margin-top: 25px;" Row="true">
-                <MudFileUpload T="IBrowserFile" AppendMultipleFiles="false" FilesChanged="@(bf => LoadImportFileAsyncCommand(bf))">
+                <MudFileUpload T="IBrowserFile" AppendMultipleFiles="false" Accept=".sql" FilesChanged="@(bf => LoadImportFileAsyncCommand(bf))">
                     <ActivatorContent>
                         <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled">
                             Open File
@@ -17,8 +17,6 @@
                 <MudText Style="margin-top: auto; margin-bottom: auto;">@Filename</MudText>
             </MudStack>
         </MudStack>
-
-
     </DialogContent>
 
     <DialogActions>

@@ -27,6 +27,11 @@
                 Disconnect
             </MudButton>
 
+            <MudButton StartIcon="@Icons.Material.TwoTone.Save" Color="Color.Success" Variant="Variant.Filled"
+                       OnClick="@(() => SaveDatabaseAsyncCommand())">
+                Save
+            </MudButton>
+
             <MudDivider Vertical="true" />
 
             <MudButton StartIcon="@Icons.Material.TwoTone.Refresh" Color="Color.Tertiary"
@@ -74,7 +79,7 @@
                        OnClick="@(() => CheckpointTransactionAsyncCommand())">
                 Checkpoint
             </MudButton>
-        }        
+        }
     </MudStack>
 
     <!-- Navigation menu -->
@@ -135,7 +140,7 @@
                                                  OnClick="@(() => IndexesCollectionAsyncCommand(item))">
                                         Indexes
                                     </MudMenuItem>
-                                    
+
                                     <MudDivider />
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.FileDownload"
@@ -169,28 +174,49 @@
     <!-- Queries -->
     <MudDynamicTabs Style="grid-row: 2; grid-column: 2; margin-top: 5px; margin-left: 5px;"
                     AddTab="@(() => AddQueryAsyncCommand())" CloseTab="@(p => CloseQueryAsyncCommand(p))"
+                    PanelClass="maximum-panel-height" Color="@Color.Info" Rounded="true"
                     AddIconToolTip="Click to add a new tab" CloseIconToolTip="Close tab. All data will be lost"
                     @bind-ActivePanelIndex="@ActiveQueryIndex">
         @foreach (var query in AllQueries)
         {
-            <MudTabPanel ID="@query.QueryId" Text="@query.Header">
-                XYZ
+            <MudTabPanel ID="@query.QueryId" Text="@query.Header" Tag="@query">
+                <InputTextArea Style="height: 100%; width: 100%; padding: 5px;"
+                               @bind-Value="query.Query" @onkeydown="@(key => ProcessQueryKeyDownAsyncCommand(key))" />
             </MudTabPanel>
         }
     </MudDynamicTabs>
 
     <!-- Query results -->
-    <MudTabs Style="grid-row: 3; grid-column: 2; margin-top: 5px; margin-left: 5px;">
+    <MudTabs Style="grid-row: 3; grid-column: 2; margin-top: 5px; margin-left: 5px;"
+             PanelClass="maximum-panel-height" Color="@Color.Primary" Rounded="true">
         <MudTabPanel Text="Text">
-
+            <InputTextArea Style="height: 100%; width: 100%; padding: 5px;"
+                           @bind-Value="SelectedQuery.JsonResult" />
         </MudTabPanel>
 
         <MudTabPanel Text="Grid">
+            <MudTable Hover="true" Class="maximum-panel-height"
+                      LoadingProgressColor="Color.Info" Bordered="true" Dense="true"
+                      Elevation="3" Height="100%" Virtualize="true" 
+                      Items="@SelectedQuery.GridRecords.Records">
+                <HeaderContent>
+                    @foreach (var column in SelectedQuery.GridRecords.AllColumns)
+                    {
+                        <MudTh>
+                            <MudTableSortLabel SortBy="new Func<DBQueryGridRecord, object>(x => x?.GetRowData(column) ?? string.Empty)">
+                                @column
+                            </MudTableSortLabel>
+                        </MudTh>
+                    }
+                </HeaderContent>
 
-        </MudTabPanel>
-
-        <MudTabPanel Text="Parameters">
-
+                <RowTemplate>
+                    @foreach (var column in SelectedQuery.GridRecords.AllColumns)
+                    {
+                        <MudTd DataLabel="@column">@context.GetRowData(column)</MudTd>
+                    }
+                </RowTemplate>
+            </MudTable>
         </MudTabPanel>
     </MudTabs>
 </div>
