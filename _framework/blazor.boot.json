@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "LiteDB.Viewer.Client",
   "resources": {
-    "hash": "sha256-tKg/OIXxxqRQ2RODj6VPO0E0izaioG/jMwB9znRYFeU=",
+    "hash": "sha256-C2RKn6a8ahF9eJ0qstMrivb4Lbnh5OhDPKnE+qBvMkI=",
     "jsModuleNative": {
       "dotnet.native.8.0.7.pvkr2na9g4.js": "sha256-tFsxPBbhkdn6GKNBKvCRLzrfAHdyM86odYTe0MtrwMk="
     },
@@ -20,7 +20,7 @@
       "BlazorComponentBus.wasm": "sha256-Y3iusDEqPeNKFX+L5jKWnvlAsAk2Y+TOoplZQZ1q7IE=",
       "BlazorFileSaver.wasm": "sha256-GG+63MJgRGs3wC7PHPn0YuHiIeYNSSTLRFB12WRi+BY=",
       "CurrieTechnologies.Razor.Clipboard.wasm": "sha256-vBJMgYbeYk769TDOiieLojmO+DfePc7AbWS4YH+WzUU=",
-      "LiteDB.Viewer.Client.wasm": "sha256-7AHhMDirRgTCuuqaBZMVVYW/bj1p8nm5RjUDwS+bs6k=",
+      "LiteDB.Viewer.Client.wasm": "sha256-5XWgUT6V399psXvuWgrYl9AekfLvuXTYivBvpaNlY+c=",
       "LiteDB.wasm": "sha256-buGOjQMkIH0b9MJXL7vreuhTGz91V2L4lG4RURDmuzM=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-0ZP/AyNsnIyeVIcKJu2D4OTrnOiClwnh45CJ2n+Bsf4=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-CtgewFVy9bNS5EN3UhgVD6pAF9Qx5AwzA4f1udjZ5/0=",
