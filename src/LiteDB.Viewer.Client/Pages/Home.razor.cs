@@ -456,7 +456,7 @@ public partial class HomeViewModel : ViewModelBase
             return;
         }
 
-        var name = "query.sql";
+        var name = $"{SelectedQuery.Header}.sql";
         await FileSaver.SaveAs(name, SelectedQuery.Query);
     }
 
