@@ -235,7 +235,7 @@ public partial class HomeViewModel : ViewModelBase
 
     private async Task HandleDisconnectDatabaseAsync()
     {
-        var isConfirm = await ConfirmActionAsync("Disconnect", "Do you want to disconnect? All changed will be lost!");
+        var isConfirm = await ConfirmActionAsync("Disconnect", "Do you want to disconnect? All unsaved changes will be lost!");
 
         if (isConfirm != true)
         {
