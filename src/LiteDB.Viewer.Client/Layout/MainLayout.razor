@@ -1,0 +1,16 @@
+﻿@using MudBlazor
+
+@inherits LayoutComponentBase
+
+<div style="height: 100%;">
+    <main style="height: 100%;">
+        <article style="height: 100%; background-color: lightgray">
+            @Body
+        </article>
+    </main>
+</div>
+
+<MudDialogProvider />
+<MudThemeProvider />
+<MudSnackbarProvider  />
+<MudPopoverProvider />

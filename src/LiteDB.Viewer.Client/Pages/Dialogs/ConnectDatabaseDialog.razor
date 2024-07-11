@@ -1,0 +1,49 @@
+﻿@layout MainLayout
+@using MudBlazor
+@inherits ConnectDatabaseDialogViewModel
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Style="margin: 5px; min-width: 450px;">            
+            <MudStack Style="margin-top: 25px;" Row="true">
+                <MudFileUpload T="IBrowserFile" AppendMultipleFiles="false" FilesChanged="@(bf => LoadDatabaseFileAsyncCommand(bf))">
+                    <ActivatorContent>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled">
+                            Open File
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+
+                <MudText Style="margin-top: auto; margin-bottom: auto;">@Filename</MudText>
+            </MudStack>
+
+            <MudText Style="margin-top: 25px;">Parameters:</MudText>
+
+            <MudStack Style="margin-left: 15px;">
+                <MudStack Spacing="0">
+                    <MudCheckBox @bind-Value="IsReadOnly" Label="Is Read Only" Color="Color.Primary" LabelPosition="LabelPosition.Start" />
+                    <MudCheckBox @bind-Value="IsUpgrade" Label="Upgrade from LiteDB v4" Color="Color.Secondary" LabelPosition="LabelPosition.Start" />
+                </MudStack>
+            </MudStack>
+
+        </MudStack>
+
+
+    </DialogContent>
+
+    <DialogActions>
+        <MudTooltip Text="Connect to database" Delay="500" Color="Color.Primary">
+            <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled"
+                       OnClick="@(() => ConnectAsyncCommand())">
+                Connect
+            </MudButton>
+        </MudTooltip>
+
+        <MudTooltip Text="Cancel database connection" Delay="500" Color="Color.Primary">
+            <MudButton Color="Color.Error" Variant="Variant.Filled"
+                       OnClick="@(() => CloseDialogAsyncCommand())">
+                Cancel
+            </MudButton>
+        </MudTooltip>
+    </DialogActions>
+</MudDialog>

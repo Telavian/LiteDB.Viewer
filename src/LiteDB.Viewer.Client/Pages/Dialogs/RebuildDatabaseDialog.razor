@@ -1,0 +1,46 @@
+﻿@layout MainLayout
+@using MudBlazor
+@inherits RebuildDatabaseDialogViewModel
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Style="margin: 5px; min-width: 450px;">
+            <MudTextField Label="Name" Variant="Variant.Filled"
+                          @bind-Value="Name" />
+
+            <MudSelect Label="Culture" Variant="Variant.Filled"
+                       @bind-Value="SelectedCulture">
+                @foreach(var culture in AllCultures)
+                {
+                    <MudSelectItem Value="@(culture)">@culture</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect Label="Sort" Variant="Variant.Filled"
+                       @bind-Value="SelectedSort">
+                @foreach (var sort in AllSorts)
+                {
+                    <MudSelectItem Value="@(sort)">@sort</MudSelectItem>
+                }
+            </MudSelect>
+        </MudStack>
+
+
+    </DialogContent>
+
+    <DialogActions>
+        <MudTooltip Text="Connect to database" Delay="500" Color="Color.Primary">
+            <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled"
+                       OnClick="@(() => RebuildAsyncCommand())">
+                Connect
+            </MudButton>
+        </MudTooltip>
+
+        <MudTooltip Text="Cancel database connection" Delay="500" Color="Color.Primary">
+            <MudButton Color="Color.Error" Variant="Variant.Filled"
+                       OnClick="@(() => CloseDialogAsyncCommand())">
+                Cancel
+            </MudButton>
+        </MudTooltip>
+    </DialogActions>
+</MudDialog>

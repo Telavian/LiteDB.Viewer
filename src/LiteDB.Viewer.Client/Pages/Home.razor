@@ -1,0 +1,196 @@
+﻿@page "/"
+@using LiteDB.Viewer.Client.Models
+@using MudBlazor
+@inherits HomeViewModel
+
+<div style="display:grid; grid-template-rows: auto 1fr 1fr; grid-template-columns: auto 1fr; padding: 5px; height: 100%;">
+
+    <!-- Menu header -->
+    <MudStack Style="grid-row: 1; grid-column: 1 / span 2;" Row="true">
+
+        @if (!AppState.IsDBOpen)
+        {
+            <MudButton StartIcon="@Icons.Material.TwoTone.CreateNewFolder" Color="Color.Success" Variant="Variant.Filled"
+                       OnClick="@(() => CreateDatabaseAsyncCommand())">
+                Create
+            </MudButton>
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled"
+                       OnClick="@(() => ConnectDatabaseAsyncCommand())">
+                Connect
+            </MudButton>
+        }
+        else
+        {
+            <MudButton StartIcon="@Icons.Material.TwoTone.Close" Color="Color.Secondary" Variant="Variant.Filled"
+                       OnClick="@(() => DisconnectDatabaseAsyncCommand())">
+                Disconnect
+            </MudButton>
+
+            <MudDivider Vertical="true" />
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.Refresh" Color="Color.Tertiary"
+                       OnClick="@(() => RefreshCollectionsAsyncCommand())">
+                Refresh
+            </MudButton>
+
+            <MudDivider Vertical="true" />
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.PlayArrow" Color="Color.Success"
+                       OnClick="@(() => RunQueryAsyncCommand())">
+                Run
+            </MudButton>
+
+            <MudDivider Vertical="true" />
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.FileUpload" Color="Color.Primary"
+                       OnClick="@(() => LoadQueryAsyncCommand())">
+                Load
+            </MudButton>
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.FileDownload" Color="Color.Primary"
+                       OnClick="@(() => SaveQueryAsyncCommand())">
+                Save
+            </MudButton>
+
+            <MudDivider Vertical="true" />
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.PlayArrow" Color="Color.Info"
+                       OnClick="@(() => BeginTransactionAsyncCommand())">
+                Begin
+            </MudButton>
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.Commit" Color="Color.Info"
+                       OnClick="@(() => CommitTransactionAsyncCommand())">
+                Commit
+            </MudButton>
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.Replay" Color="Color.Info"
+                       OnClick="@(() => RollbackTransactionAsyncCommand())">
+                Rollback
+            </MudButton>
+
+            <MudButton StartIcon="@Icons.Material.TwoTone.Check" Color="Color.Info"
+                       OnClick="@(() => CheckpointTransactionAsyncCommand())">
+                Checkpoint
+            </MudButton>
+        }        
+    </MudStack>
+
+    <!-- Navigation menu -->
+    <MudPaper Style="grid-row: 2 / span 2; grid-column: 1; width: 250px; margin-top: 5px;" Elevation="5">
+        <MudTreeView SelectionMode="SelectionMode.SingleSelection" AutoExpand="true" Hover="true"
+                     Items="@AllCollections"
+                     @bind-SelectedValue="SelectedCollection">
+            <ItemTemplate Context="item">
+                <MudTreeViewItem Style="width: 100%;" Expanded="true"
+                                 Icon="@item.Icon" Value="@item"
+                                 Items="@item!.Children">
+                    <BodyContent>
+                        <MudMenu ActivationEvent="MouseEvent.RightClick">
+                            <ActivatorContent>
+                                <MudText Style="width: 100%;">@item.Name</MudText>
+                            </ActivatorContent>
+
+                            <ChildContent>
+                                @if (item.IsRoot)
+                                {
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.Dataset"
+                                                 OnClick="@(() => DatabaseInfoAsyncCommand(item))">
+                                        Database info
+                                    </MudMenuItem>
+
+                                    <MudDivider />
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.FileUpload"
+                                                 OnClick="@(() => ImportDatabaseAsyncCommand(item))">
+                                        Import
+                                    </MudMenuItem>
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.Build"
+                                                 OnClick="@(() => RebuildDatabaseAsyncCommand(item))">
+                                        Rebuild
+                                    </MudMenuItem>
+                                }
+                                else
+                                {
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.Task"
+                                                 OnClick="@(() => NewQueryAsyncCommand(item))">
+                                        Query
+                                    </MudMenuItem>
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.FormatListNumbered"
+                                                 OnClick="@(() => CountCollectionAsyncCommand(item))">
+                                        Count
+                                    </MudMenuItem>
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.QuestionMark"
+                                                 OnClick="@(() => ExplainCollectionAsyncCommand(item))">
+                                        Explain plan
+                                    </MudMenuItem>
+
+                                    <MudDivider />
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.ListAlt"
+                                                 OnClick="@(() => IndexesCollectionAsyncCommand(item))">
+                                        Indexes
+                                    </MudMenuItem>
+                                    
+                                    <MudDivider />
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.FileDownload"
+                                                 OnClick="@(() => ExportCollectionAsyncCommand(item))">
+                                        Export
+                                    </MudMenuItem>
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.Search"
+                                                 OnClick="@(() => AnalyzeCollectionAsyncCommand(item))">
+                                        Analyze
+                                    </MudMenuItem>
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.Edit"
+                                                 OnClick="@(() => RenameCollectionAsyncCommand(item))">
+                                        Rename
+                                    </MudMenuItem>
+
+                                    <MudMenuItem Icon="@Icons.Material.TwoTone.Delete"
+                                                 OnClick="@(() => DropCollectionAsyncCommand(item))">
+                                        Drop collection
+                                    </MudMenuItem>
+                                }
+                            </ChildContent>
+                        </MudMenu>
+                    </BodyContent>
+                </MudTreeViewItem>
+            </ItemTemplate>
+        </MudTreeView>
+    </MudPaper>
+
+    <!-- Queries -->
+    <MudDynamicTabs Style="grid-row: 2; grid-column: 2; margin-top: 5px; margin-left: 5px;"
+                    AddTab="@(() => AddQueryAsyncCommand())" CloseTab="@(p => CloseQueryAsyncCommand(p))"
+                    AddIconToolTip="Click to add a new tab" CloseIconToolTip="Close tab. All data will be lost"
+                    @bind-ActivePanelIndex="@ActiveQueryIndex">
+        @foreach (var query in AllQueries)
+        {
+            <MudTabPanel ID="@query.QueryId" Text="@query.Header">
+                XYZ
+            </MudTabPanel>
+        }
+    </MudDynamicTabs>
+
+    <!-- Query results -->
+    <MudTabs Style="grid-row: 3; grid-column: 2; margin-top: 5px; margin-left: 5px;">
+        <MudTabPanel Text="Text">
+
+        </MudTabPanel>
+
+        <MudTabPanel Text="Grid">
+
+        </MudTabPanel>
+
+        <MudTabPanel Text="Parameters">
+
+        </MudTabPanel>
+    </MudTabs>
+</div>

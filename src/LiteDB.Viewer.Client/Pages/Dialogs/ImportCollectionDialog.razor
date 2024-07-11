@@ -1,0 +1,42 @@
+﻿@layout MainLayout
+@using MudBlazor
+@inherits ImportCollectionDialogViewModel
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Style="margin: 5px; min-width: 450px;">            
+            <MudStack Style="margin-top: 25px;" Row="true">
+                <MudFileUpload T="IBrowserFile" AppendMultipleFiles="false" FilesChanged="@(bf => LoadImportFileAsyncCommand(bf))">
+                    <ActivatorContent>
+                        <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled">
+                            Open File
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+
+                <MudText Style="margin-top: auto; margin-bottom: auto;">@Filename</MudText>
+            </MudStack>
+
+            <MudTextField Label="Collection name"
+                          @bind-Value="CollectionName" />
+        </MudStack>
+
+
+    </DialogContent>
+
+    <DialogActions>
+        <MudTooltip Text="Connect to database" Delay="500" Color="Color.Primary">
+            <MudButton StartIcon="@Icons.Material.TwoTone.FileOpen" Color="Color.Primary" Variant="Variant.Filled"
+                       OnClick="@(() => ImportAsyncCommand())">
+                Connect
+            </MudButton>
+        </MudTooltip>
+
+        <MudTooltip Text="Cancel database connection" Delay="500" Color="Color.Primary">
+            <MudButton Color="Color.Error" Variant="Variant.Filled"
+                       OnClick="@(() => CloseDialogAsyncCommand())">
+                Cancel
+            </MudButton>
+        </MudTooltip>
+    </DialogActions>
+</MudDialog>
