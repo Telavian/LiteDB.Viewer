@@ -8,11 +8,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using System.Globalization;
-using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Nodes;
-using static MudBlazor.CategoryTypes;
-using static MudBlazor.Colors;
 
 namespace LiteDB.Viewer.Client.Pages;
 
@@ -111,6 +108,32 @@ public partial class HomeViewModel : ViewModelBase
 
     private Func<KeyboardEventArgs, Task>? _processQueryKeyDownAsyncCommand;
     public Func<KeyboardEventArgs, Task> ProcessQueryKeyDownAsyncCommand => _processQueryKeyDownAsyncCommand ??= CreateEventCallbackAsyncCommand<KeyboardEventArgs>(HandleProcessQueryKeyDownAsync, "Unable to process key down");
+
+    protected IReadOnlyCollection<TreeItemData<DBCollection>> ConvertCollectionsToTreeItems()
+    {
+        return AllCollections
+            .Select(x => ConvertToFullTreeItem(x))
+            .ToArray();
+    }
+
+    protected TreeItemData<DBCollection> ConvertToFullTreeItem(DBCollection item)
+    {
+        return new TreeItemData<DBCollection>
+        {
+            Value = item,
+            Children = item.Children
+                .Select(x => ConvertToFullTreeItem(x))
+                .ToList()
+        };
+    }
+
+    protected TreeItemData<DBCollection> ConvertToTreeItem(DBCollection item)
+    {
+        return new TreeItemData<DBCollection>
+        {
+            Value = item,
+        };
+    }
 
     private async Task HandleCreateDatabaseAsync()
     {

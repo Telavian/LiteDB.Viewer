@@ -85,81 +85,85 @@
     <!-- Navigation menu -->
     <MudPaper Style="grid-row: 2 / span 2; grid-column: 1; width: 250px; margin-top: 5px;" Elevation="5">
         <MudTreeView SelectionMode="SelectionMode.SingleSelection" AutoExpand="true" Hover="true"
-                     Items="@AllCollections"
+                     Items="@(ConvertCollectionsToTreeItems())"
                      @bind-SelectedValue="SelectedCollection">
             <ItemTemplate Context="item">
+                @{
+                    var localChildren = item.Value.Children.Select(x => ConvertToTreeItem(x)).ToArray();
+                }
+
                 <MudTreeViewItem Style="width: 100%;" Expanded="true"
-                                 Icon="@item.Icon" Value="@item"
-                                 Items="@item!.Children">
+                                 Icon="@item.Value.Icon" Value="@item.Value"
+                                 Items="@localChildren">
                     <BodyContent>
                         <MudMenu ActivationEvent="MouseEvent.RightClick">
                             <ActivatorContent>
-                                <MudText Style="width: 100%;">@item.Name</MudText>
+                                <MudText Style="width: 100%;">@item.Value.Name</MudText>
                             </ActivatorContent>
 
                             <ChildContent>
-                                @if (item.IsRoot)
+                                @if (item.Value.IsRoot)
                                 {
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.Dataset"
-                                                 OnClick="@(() => DatabaseInfoAsyncCommand(item))">
+                                                 OnClick="@(() => DatabaseInfoAsyncCommand(item.Value))">
                                         Database info
                                     </MudMenuItem>
 
                                     <MudDivider />
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.FileUpload"
-                                                 OnClick="@(() => ImportDatabaseAsyncCommand(item))">
+                                                 OnClick="@(() => ImportDatabaseAsyncCommand(item.Value))">
                                         Import
                                     </MudMenuItem>
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.Build"
-                                                 OnClick="@(() => RebuildDatabaseAsyncCommand(item))">
+                                                 OnClick="@(() => RebuildDatabaseAsyncCommand(item.Value))">
                                         Rebuild
                                     </MudMenuItem>
                                 }
                                 else
                                 {
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.Task"
-                                                 OnClick="@(() => NewQueryAsyncCommand(item))">
+                                                 OnClick="@(() => NewQueryAsyncCommand(item.Value))">
                                         Query
                                     </MudMenuItem>
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.FormatListNumbered"
-                                                 OnClick="@(() => CountCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => CountCollectionAsyncCommand(item.Value))">
                                         Count
                                     </MudMenuItem>
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.QuestionMark"
-                                                 OnClick="@(() => ExplainCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => ExplainCollectionAsyncCommand(item.Value))">
                                         Explain plan
                                     </MudMenuItem>
 
                                     <MudDivider />
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.ListAlt"
-                                                 OnClick="@(() => IndexesCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => IndexesCollectionAsyncCommand(item.Value))">
                                         Indexes
                                     </MudMenuItem>
 
                                     <MudDivider />
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.FileDownload"
-                                                 OnClick="@(() => ExportCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => ExportCollectionAsyncCommand(item.Value))">
                                         Export
                                     </MudMenuItem>
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.Search"
-                                                 OnClick="@(() => AnalyzeCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => AnalyzeCollectionAsyncCommand(item.Value))">
                                         Analyze
                                     </MudMenuItem>
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.Edit"
-                                                 OnClick="@(() => RenameCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => RenameCollectionAsyncCommand(item.Value))">
                                         Rename
                                     </MudMenuItem>
 
                                     <MudMenuItem Icon="@Icons.Material.TwoTone.Delete"
-                                                 OnClick="@(() => DropCollectionAsyncCommand(item))">
+                                                 OnClick="@(() => DropCollectionAsyncCommand(item.Value))">
                                         Drop collection
                                     </MudMenuItem>
                                 }
